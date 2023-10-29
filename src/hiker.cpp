@@ -1,18 +1,20 @@
 #include "hiker.hpp"
 #include <iostream>
 
-Hiker::Hiker(const std::string &name, const std::string &email, int experienceLevel)
-    : name(new std::string(name)), email(new std::string(email)), experienceLevel(new int(experienceLevel))
+Hiker::Hiker(const std::string &name, const std::string &email, int experienceLevel, const std::string &equipment)
+    : name(new std::string(name)),
+      email(new std::string(email)),
+      experienceLevel(new int(experienceLevel)),
+      equipment(new std::string(equipment))
 {
-    std::cout << "Constructor called! " << name << std::endl;
 }
 
 Hiker::Hiker(const Hiker &other)
     : name(new std::string(*(other.name))),
       email(new std::string(*(other.email))),
-      experienceLevel(new int(*(other.experienceLevel)))
+      experienceLevel(new int(*(other.experienceLevel))),
+      equipment(new std::string(*(other.equipment)))
 {
-    std::cout << "Copy constructor called! " << *experienceLevel << std::endl;
 }
 
 Hiker &Hiker::operator=(const Hiker &other)
@@ -22,15 +24,19 @@ Hiker &Hiker::operator=(const Hiker &other)
         return *this;
     }
 
-    delete name;
-    delete email;
-    delete experienceLevel;
+    if (other.equipment)
+    {
+        if (equipment)
+        {
+            *equipment = *equipment + " " + *other.equipment;
+        }
+        else
+        {
+            equipment = new std::string(*(other.equipment));
+        }
+    }
 
-    name = new std::string(*(other.name));
-    email = new std::string(*(other.email));
-    experienceLevel = new int(*(other.experienceLevel));
-
-    std::cout << "assignment operator " << *this->name << std::endl;
+    std::cout << *this->name << " got the equipment " << *other.equipment << " from " << *other.name << std::endl;
 
     return *this;
 }
@@ -40,9 +46,7 @@ Hiker::~Hiker()
     delete name;
     delete email;
     delete experienceLevel;
-
-    std::cout << "Freed memory from destructor !\n"
-              << std::endl;
+    delete equipment;
 }
 
 std::string Hiker::getName() const
@@ -60,6 +64,11 @@ int Hiker::getExperienceLevel() const
     return *experienceLevel;
 }
 
+std::string Hiker::getEquipment() const
+{
+    return *equipment;
+}
+
 std::string Hiker::getHikingDifficulty() const
 {
     return calculateHikingDifficulty();
@@ -70,6 +79,7 @@ void Hiker::displayHikerInfo() const
     std::cout << "Name: " << *name << std::endl;
     std::cout << "Email: " << *email << std::endl;
     std::cout << "Experience Level: " << *experienceLevel << std::endl;
+    std::cout << "Equipment: " << *equipment << std::endl;
     std::cout << "Hiking Difficulty: " << calculateHikingDifficulty() << "\n"
               << std::endl;
 }

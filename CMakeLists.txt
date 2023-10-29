@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.10)
 
 project(PAOO_HWS)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
+
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_FILES src/main.cpp src/hiker.cpp src/hiker.hpp)
 
-add_executable(hw_exe ${SOURCE_FILES})
+add_executable(hiker ${SOURCE_FILES})

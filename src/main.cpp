@@ -20,5 +20,9 @@ int main()
 
     hiker4.displayHikerInfo();
 
+    Hiker hiker5("John", "john@student.ro", 3, "Backpack");
+    Hiker hiker6(std::move(hiker5));
+    hiker6.displayHikerInfo();
+
     return 0;
 }

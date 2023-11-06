@@ -1,2 +1,7 @@
 /build/
 .vscode/
+CMakeFiles
+*.cmake
+CMakeCache.txt
+hiker
+Makefile

@@ -6,6 +6,6 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCE_FILES src/main.cpp src/hiker.cpp src/hiker.hpp)
+set(SOURCE_FILES src/main.cpp src/hiker.cpp)
 
 add_executable(hiker ${SOURCE_FILES})

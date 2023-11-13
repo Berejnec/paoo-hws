@@ -5,3 +5,5 @@ CMakeFiles
 CMakeCache.txt
 hiker
 Makefile
+*.exe
+*.a

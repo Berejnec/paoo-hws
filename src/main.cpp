@@ -1,28 +1,56 @@
-#include "hiker.hpp"
+#include "hiker_management/hiker.hpp"
 #include <iostream>
+#include <vector>
+#include "utility.hpp"
+#include "genericitem.hpp"
 
 int main()
 {
-    Hiker hiker1("Adrian", "adrian@student.ro", 4, "Helmet");
-    Hiker hiker2("Tudor", "tudor@student.ro", 2, "Shoes");
+    std::vector<Hiker> hikerCollection;
 
-    Hiker hiker3(hiker1);
+    Hiker hiker1("Adrian", "adrian@student.ro", 4, Equipment("Helmet", 25.2));
+    hikerCollection.push_back(hiker1);
 
-    Hiker hiker4("Albert", "albert@student.ro", 5, "Sunglasses");
+    Hiker hiker2("Tudor", "tudor@student.ro", 8, Equipment("Shoes", 31.1));
+    hikerCollection.push_back(hiker2);
 
-    hiker1.displayHikerInfo();
-    hiker2.displayHikerInfo();
-    hiker3.displayHikerInfo();
-    hiker4.displayHikerInfo();
+    Hiker hiker3("Albert", "albert@student.ro", 5, Equipment("Sunglasses", 30.5));
+    hikerCollection.push_back(hiker3);
 
-    hiker4 = hiker2;
-    hiker4 = hiker1;
+    Hiker hiker4("John", "john@student.ro", 3, Equipment("Backpack", 31.0));
+    hikerCollection.push_back(hiker4);
 
-    hiker4.displayHikerInfo();
+    for (const Hiker &hiker : hikerCollection)
+    {
+        hiker.displayHikerInfo();
+    }
 
-    Hiker hiker5("John", "john@student.ro", 3, "Backpack");
-    Hiker hiker6(std::move(hiker5));
-    hiker6.displayHikerInfo();
+    std::vector<Equipment> equipmentCollection = {
+        *hiker1.getEquipment(),
+        *hiker2.getEquipment(),
+        *hiker3.getEquipment(),
+        *hiker4.getEquipment(),
+    };
+
+    try
+    {
+        Equipment mostExpensiveEquipment = findMax(equipmentCollection);
+        std::cout << "Most Expensive Equipment: " << mostExpensiveEquipment.getName() << " (Price: $" << mostExpensiveEquipment.getPrice() << ")" << std::endl;
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
+
+    GenericItem<int> hiker1Experience(hiker1.getName(), hiker1.getExperienceLevel());
+    GenericItem<int> hiker2Experience(hiker2.getName(), hiker2.getExperienceLevel());
+    GenericItem<int> hiker3Experience(hiker3.getName(), hiker3.getExperienceLevel());
+    GenericItem<int> hiker4Experience(hiker4.getName(), hiker4.getExperienceLevel());
+
+    std::vector<GenericItem<int>> hikerExperiences = {hiker1Experience, hiker2Experience, hiker3Experience, hiker4Experience};
+    GenericItem<double> equipment1Price(hiker1.getEquipment()->getName(), hiker1.getEquipment()->getPrice());
+
+    std::cout << "Highest experience: " << findMax(hikerExperiences).getName() << " " << findMax(hikerExperiences).getValue() << std::endl;
 
     return 0;
 }

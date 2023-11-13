@@ -9,7 +9,7 @@ public:
     virtual ~IHiker() = default;
 
     virtual int getExperienceLevel() const = 0;
-    virtual std::string getEquipment() const = 0;
+    virtual Equipment *getEquipment() const = 0;
     virtual std::string getHikingDifficulty() const = 0;
     virtual void displayHikerInfo() const = 0;
 };

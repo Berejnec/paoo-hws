@@ -1,15 +1,15 @@
 #include "hiker.hpp"
 #include <iostream>
 
-Hiker::Hiker(const std::string &name, const std::string &email, int experienceLevel, const std::string &equipment)
-    : identity::Identity(name, email), experienceLevel(new int(experienceLevel)), equipment(new std::string(equipment))
+Hiker::Hiker(const std::string &name, const std::string &email, int experienceLevel, const Equipment &equipment)
+    : identity::Identity(name, email), experienceLevel(new int(experienceLevel)), equipment(new Equipment(equipment.getName(), equipment.getPrice()))
 {
 }
 
 Hiker::Hiker(const Hiker &other)
-    : Identity(other.name, other.email),
+    : Identity(other.getName(), other.getEmail()),
       experienceLevel(new int(*(other.experienceLevel))),
-      equipment(new std::string(*(other.equipment)))
+      equipment(new Equipment((other.equipment->getName()), (other.equipment->getPrice())))
 {
 }
 
@@ -24,32 +24,33 @@ Hiker &Hiker::operator=(const Hiker &other)
     {
         if (equipment)
         {
-            *equipment = *equipment + " " + *other.equipment;
+            *equipment = Equipment(equipment->getName() + " " + other.equipment->getName(), equipment->getPrice());
         }
         else
         {
-            equipment = new std::string(*(other.equipment));
+            equipment = new Equipment(*(other.equipment));
         }
     }
-
-    std::cout << this->name << " got the equipment " << *other.equipment << " from " << other.name << std::endl;
 
     return *this;
 }
 
+bool Hiker::operator>(const Hiker &other) const
+{
+    return *experienceLevel > *other.experienceLevel;
+}
+
 Hiker::Hiker(Hiker &&other) noexcept
-    : Identity(std::move(other.name), std::move(other.email)),
+    : Identity(std::move(other.getName()), std::move(other.getEmail())),
       experienceLevel(other.experienceLevel),
       equipment(std::move(other.equipment))
 {
     other.experienceLevel = nullptr;
     other.equipment = nullptr;
-    std::cout << "Move constructor hiker called" << std::endl;
 }
 
 Hiker::~Hiker()
 {
-    std::cout << "Destructor hiker called" << std::endl;
     delete experienceLevel;
     delete equipment;
 }
@@ -59,9 +60,9 @@ int Hiker::getExperienceLevel() const
     return *experienceLevel;
 }
 
-std::string Hiker::getEquipment() const
+Equipment *Hiker::getEquipment() const
 {
-    return *equipment;
+    return equipment;
 }
 
 std::string Hiker::getHikingDifficulty() const
@@ -71,10 +72,11 @@ std::string Hiker::getHikingDifficulty() const
 
 void Hiker::displayHikerInfo() const
 {
-    std::cout << "Name: " << getName() << std::endl;
+    std::cout << "Hiker name: " << getName() << std::endl;
     std::cout << "Email: " << getEmail() << std::endl;
     std::cout << "Experience Level: " << *experienceLevel << std::endl;
-    std::cout << "Equipment: " << *equipment << std::endl;
+    std::cout << "Equipment name: " << equipment->getName() << std::endl;
+    std::cout << "Equipment price: " << equipment->getPrice() << std::endl;
     std::cout << "Hiking Difficulty: " << calculateHikingDifficulty() << "\n"
               << std::endl;
 }

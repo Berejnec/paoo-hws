@@ -1,13 +1,13 @@
-#ifndef GENERICITEM_HPP
-#define GENERICITEM_HPP
+#ifndef NAMEDVALUE_HPP
+#define NAMEDVALUE_HPP
 
 #include <string>
 
 template <typename T>
-class GenericItem
+class NamedValue
 {
 public:
-    GenericItem(const std::string &name, const T &value) : name(name), value(value) {}
+    NamedValue(const std::string &name, const T &value) : name(name), value(value) {}
 
     const std::string &getName() const
     {
@@ -19,7 +19,7 @@ public:
         return value;
     }
 
-    bool operator>(const GenericItem<T> &other) const
+    bool operator>(const NamedValue<T> &other) const
     {
         return value > other.value;
     }

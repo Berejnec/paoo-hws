@@ -3,13 +3,14 @@
 #include "../identity_management/identity.hpp"
 #include "../equipment_management/equipment.hpp"
 #include "ihiker.hpp"
+#include <memory>
 
 #include <string>
 
 class Hiker : public identity::Identity, public IHiker
 {
 public:
-    Hiker(const std::string &name, const std::string &email, int experienceLevel, const Equipment &equipment);
+    Hiker(const std::string &name, const std::string &email, int experienceLevel, std::unique_ptr<Equipment> equipment);
 
     Hiker(const Hiker &other);
 
@@ -23,12 +24,16 @@ public:
 
     int getExperienceLevel() const override;
     std::string getHikingDifficulty() const override;
-    Equipment *getEquipment() const override;
+    std::unique_ptr<Equipment> getEquipment() const override;
     void displayHikerInfo() const override;
+
+    // setters
+    void setExperienceLevel(int level);
+    void setEquipment(std::unique_ptr<Equipment> newEquipment);
 
 private:
     int *experienceLevel;
-    Equipment *equipment;
+    std::unique_ptr<Equipment> equipment;
 
     std::string calculateHikingDifficulty() const;
 };

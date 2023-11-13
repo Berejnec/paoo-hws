@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(Hiker)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_STANDARD_REQUIRED True)
 
 set(SOURCE_FILES main.cpp)

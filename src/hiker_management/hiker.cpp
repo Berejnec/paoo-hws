@@ -1,15 +1,16 @@
 #include "hiker.hpp"
+#include <memory>
 #include <iostream>
 
-Hiker::Hiker(const std::string &name, const std::string &email, int experienceLevel, const Equipment &equipment)
-    : identity::Identity(name, email), experienceLevel(new int(experienceLevel)), equipment(new Equipment(equipment.getName(), equipment.getPrice()))
+Hiker::Hiker(const std::string &name, const std::string &email, int experienceLevel, std::unique_ptr<Equipment> equipment)
+    : identity::Identity(name, email), experienceLevel(new int(experienceLevel)), equipment(std::move(equipment))
 {
 }
 
 Hiker::Hiker(const Hiker &other)
     : Identity(other.getName(), other.getEmail()),
       experienceLevel(new int(*(other.experienceLevel))),
-      equipment(new Equipment((other.equipment->getName()), (other.equipment->getPrice())))
+      equipment(std::make_unique<Equipment>(*(other.equipment)))
 {
 }
 
@@ -24,12 +25,16 @@ Hiker &Hiker::operator=(const Hiker &other)
     {
         if (equipment)
         {
-            *equipment = Equipment(equipment->getName() + " " + other.equipment->getName(), equipment->getPrice());
+            equipment = std::make_unique<Equipment>(equipment->getName() + " " + other.equipment->getName(), equipment->getPrice());
         }
         else
         {
-            equipment = new Equipment(*(other.equipment));
+            equipment = std::make_unique<Equipment>(*other.equipment);
         }
+    }
+    else
+    {
+        equipment.reset();
     }
 
     return *this;
@@ -52,7 +57,6 @@ Hiker::Hiker(Hiker &&other) noexcept
 Hiker::~Hiker()
 {
     delete experienceLevel;
-    delete equipment;
 }
 
 int Hiker::getExperienceLevel() const
@@ -60,9 +64,9 @@ int Hiker::getExperienceLevel() const
     return *experienceLevel;
 }
 
-Equipment *Hiker::getEquipment() const
+std::unique_ptr<Equipment> Hiker::getEquipment() const
 {
-    return equipment;
+    return std::make_unique<Equipment>(*equipment);
 }
 
 std::string Hiker::getHikingDifficulty() const
@@ -95,4 +99,14 @@ std::string Hiker::calculateHikingDifficulty() const
     {
         return "Advanced";
     }
+}
+
+void Hiker::setExperienceLevel(int level)
+{
+    *experienceLevel = level;
+}
+
+void Hiker::setEquipment(std::unique_ptr<Equipment> newEquipment)
+{
+    equipment = std::move(newEquipment);
 }

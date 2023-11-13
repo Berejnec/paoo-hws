@@ -10,7 +10,7 @@
 class Hiker : public identity::Identity, public IHiker
 {
 public:
-    Hiker(const std::string &name, const std::string &email, int experienceLevel, std::unique_ptr<Equipment> equipment);
+    Hiker(const std::string &name, const std::string &email, int experienceLevel, std::shared_ptr<std::string> drinkBottle, std::unique_ptr<Equipment> equipment);
 
     Hiker(const Hiker &other);
 
@@ -26,6 +26,7 @@ public:
     std::string getHikingDifficulty() const override;
     std::unique_ptr<Equipment> getEquipment() const override;
     void displayHikerInfo() const override;
+    std::shared_ptr<std::string> getDrinkBottle() const override;
 
     // setters
     void setExperienceLevel(int level);
@@ -34,6 +35,7 @@ public:
 private:
     int *experienceLevel;
     std::unique_ptr<Equipment> equipment;
+    std::shared_ptr<std::string> drinkBottle;
 
     std::string calculateHikingDifficulty() const;
 };

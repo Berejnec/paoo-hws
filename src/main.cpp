@@ -8,21 +8,22 @@
 int main()
 {
     std::vector<Hiker> hikerCollection;
+    std::shared_ptr<std::string> waterBottle = std::make_shared<std::string>("Dorna Water");
 
     std::unique_ptr<Equipment> equipment1 = std::make_unique<Equipment>("Helmet", 25.2);
-    Hiker hiker1("Adrian", "adrian@student.ro", 4, std::move(equipment1));
+    Hiker hiker1("Adrian", "adrian@student.ro", 4, waterBottle, std::move(equipment1));
     hikerCollection.push_back(hiker1);
 
     std::unique_ptr<Equipment> equipment2 = std::make_unique<Equipment>("Shoes", 31.1);
-    Hiker hiker2("Tudor", "tudor@student.ro", 8, std::move(equipment2));
+    Hiker hiker2("Tudor", "tudor@student.ro", 8, waterBottle, std::move(equipment2));
     hikerCollection.push_back(hiker2);
 
     std::unique_ptr<Equipment> equipment3 = std::make_unique<Equipment>("Sunglasses", 31.11);
-    Hiker hiker3("Albert", "albert@student.ro", 9, std::move(equipment3));
+    Hiker hiker3("Albert", "albert@student.ro", 9, waterBottle, std::move(equipment3));
     hikerCollection.push_back(hiker3);
 
     std::unique_ptr<Equipment> equipment4 = std::make_unique<Equipment>("Backpack", 31.0);
-    Hiker hiker4("John", "john@student.ro", 7, std::move(equipment4));
+    Hiker hiker4("John", "john@student.ro", 7, waterBottle, std::move(equipment4));
     hikerCollection.push_back(hiker4);
 
     for (const Hiker &hiker : hikerCollection)
@@ -58,9 +59,17 @@ int main()
     std::cout << "Highest experience: " << findMax(hikerExperiences).getName() << " " << findMax(hikerExperiences).getValue() << std::endl;
 
     std::unique_ptr<Equipment> equipmentToMove = std::make_unique<Equipment>("Helmet", 25.2);
+
     std::cout << "Equipment 1 before losing ownership: " << equipmentToMove << std::endl;
-    Hiker newHiker("Adrian", "adrian@student.ro", 4, std::move(equipmentToMove));
+
+    Hiker newHiker("Adrian", "adrian@student.ro", 4, waterBottle, std::move(equipmentToMove));
+
     std::cout << "Equipment 1 after: " << equipmentToMove << std::endl;
+
+    std::cout << "Hiker1 drinks from water bottle: " << hiker1.getDrinkBottle() << std::endl;
+    std::cout << "Hiker2 drinks from the same water bottle: " << hiker2.getDrinkBottle() << std::endl;
+    std::cout << "Hiker3 drinks from the same water bottle: " << hiker3.getDrinkBottle() << std::endl;
+    std::cout << "Hiker4 drinks from the same water bottle: " << hiker4.getDrinkBottle() << std::endl;
 
     if (equipmentToMove == nullptr)
     {

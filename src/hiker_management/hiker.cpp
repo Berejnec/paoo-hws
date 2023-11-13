@@ -2,14 +2,15 @@
 #include <memory>
 #include <iostream>
 
-Hiker::Hiker(const std::string &name, const std::string &email, int experienceLevel, std::unique_ptr<Equipment> equipment)
-    : identity::Identity(name, email), experienceLevel(new int(experienceLevel)), equipment(std::move(equipment))
+Hiker::Hiker(const std::string &name, const std::string &email, int experienceLevel, std::shared_ptr<std::string> drinkBottle, std::unique_ptr<Equipment> equipment)
+    : identity::Identity(name, email), experienceLevel(new int(experienceLevel)), drinkBottle(std::move(drinkBottle)), equipment(std::move(equipment))
 {
 }
 
 Hiker::Hiker(const Hiker &other)
     : Identity(other.getName(), other.getEmail()),
       experienceLevel(new int(*(other.experienceLevel))),
+      drinkBottle(std::shared_ptr<std::string>(other.drinkBottle)),
       equipment(std::make_unique<Equipment>(*(other.equipment)))
 {
 }
@@ -83,6 +84,11 @@ void Hiker::displayHikerInfo() const
     std::cout << "Equipment price: " << equipment->getPrice() << std::endl;
     std::cout << "Hiking Difficulty: " << calculateHikingDifficulty() << "\n"
               << std::endl;
+}
+
+std::shared_ptr<std::string> Hiker::getDrinkBottle() const
+{
+    return std::shared_ptr<std::string>(drinkBottle);
 }
 
 std::string Hiker::calculateHikingDifficulty() const
